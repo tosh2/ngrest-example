@@ -4,21 +4,17 @@
 Seguir las siguientes instrucciones:
 
 1. Instalar ngREST
-2. Clonar el repo
-3. Abrir una terminal e ingresar los sig. comandos
+2. Abrir una terminal e ingresar los sig. comandos
 
 ```
-$ ngrest create apis
-$
-$ # Copiar todos los archivos dentro de la carpeta /src
-$
-$ cd apis
+$ mkdir apis && cd apis
+$ git clone https://github.com/tosh2/ngrest-example .
 $ ngrest
 $
 $ # ir a la url "localhost:9098/apis/getEstudiantes"
 ```
 
-4. Probar las apis
+3. Probar las apis
 ```
 http://localhost:9098/apis/getEstudiante
 
