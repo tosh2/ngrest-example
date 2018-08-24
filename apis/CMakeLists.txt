@@ -1,0 +1,32 @@
+cmake_minimum_required(VERSION 2.6)
+
+project (apis CXX)
+
+set(APIS_HEADERS apis.h)
+
+set(PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(APIS_CODEGEN_DIR "${PROJECT_BINARY_DIR}/codegen")
+
+PREPEND(APIS_HEADERS_PATHS ${PROJECT_SOURCE_DIR} ${APIS_HEADERS})
+
+CODEGEN_FILES(APIS_CODEGEN_SOURCES ${APIS_CODEGEN_DIR} ${APIS_HEADERS})
+
+add_custom_command(OUTPUT ${APIS_CODEGEN_SOURCES}
+    COMMAND ${NGREST_BIN_PATH}ngrestcg -i "${PROJECT_SOURCE_DIR}" -o ${APIS_CODEGEN_DIR} -t service ${APIS_HEADERS}
+    DEPENDS ${APIS_HEADERS_PATHS}
+)
+
+file(GLOB APIS_SOURCES ${PROJECT_SOURCE_DIR}/*.cpp)
+
+list(APPEND APIS_SOURCES ${APIS_CODEGEN_SOURCES})
+
+include_directories(${PROJECT_SOURCE_DIR} $ENV{NGREST_EXT_INCLUDES})
+
+add_library(apis MODULE ${APIS_SOURCES})
+
+set_target_properties(apis PROPERTIES PREFIX "")
+set_target_properties(apis PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SERVICES_DIR}"
+)
+
+target_link_libraries(apis ngrestutils ngrestcommon ngrestjson ngrestengine $ENV{NGREST_EXT_LIBS})
